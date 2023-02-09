@@ -7,6 +7,6 @@ namespace Models
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public ICollection<WholesalerBeer> WholesalerBeers { get; set; }
+		public List<WholesalerBeer> WholesalerBeers { get; set; }
 	}
 }

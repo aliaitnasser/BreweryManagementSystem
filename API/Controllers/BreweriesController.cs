@@ -1,4 +1,4 @@
-﻿using API.DTOs;
+﻿using API.Dtos;
 using Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -13,47 +13,32 @@ namespace API.Controllers
             _breweryRepository = breweryRepository;
         }
 
-		[HttpGet("{id}")]
-		public async Task<ActionResult<List<GetBeerDTO>>> GetAllBeersByBrewery(int id)
+		[HttpGet]
+		public async Task<ActionResult<List<Brewery>>> GetAllBreweries()
 		{
-			List<GetBeerDTO> beersDto = new List<GetBeerDTO>();
+			var breweries = await _breweryRepository.GetAllBreweriesAsync();
+			return Ok(breweries);
+		}
 
+		[HttpGet("{id}/beers")]
+		public async Task<ActionResult<List<Beer>>> GetAllBeersByBrewery(int id)
+		{
 			var beers = await _breweryRepository.GetAllBeers(id);
-
-			foreach (var beer in beers)
-			{
-				beersDto.Add(MapBeerToGetBeerDTO(beer));
-			}
-
-			return Ok(beersDto);
+			return Ok(beers);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateBeer(CreateBeerDTO beerDTO)
+		public async Task<IActionResult> CreateBeer(Beer beer)
 		{
-			var beer = new Beer
-			{
-				Name = beerDTO.Name,
-				BreweryId = beerDTO.BreweryId,
-				AlcoholContent = beerDTO.AlcoholContent,
-				Quantity = beerDTO.Quantity,
-				Price = beerDTO.Price
-			};
 			await _breweryRepository.AddBeer(beer);
 			return Ok();
 		}
 
-		private GetBeerDTO MapBeerToGetBeerDTO(Beer beer)
+		[HttpDelete("{breweryId}/beer/{beerId}")]
+		public async Task<IActionResult> DeleteBeer(int beerId, int breweryId)
 		{
-			return new GetBeerDTO
-			{
-				Id = beer.Id,
-				Name = beer.Name,
-				BreweryId = beer.BreweryId,
-				AlcoholContent = beer.AlcoholContent,
-				Quantity = beer.Quantity,
-				Price = beer.Price
-			};
+			await _breweryRepository.DeleteBeer(beerId, breweryId);
+			return Ok();
 		}
     }
 }

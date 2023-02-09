@@ -9,6 +9,8 @@ namespace Application.Repositories
 	{
 		Task<List<Beer>> GetAllBeers(int breweryId);
 		Task AddBeer(Beer beer);
-		Task DeleteBeer(Beer beer);
+		Task DeleteBeer(int beerId, int breweryId);
+		Task<List<Brewery>> GetAllBreweriesAsync();
+		Task<Brewery> GetBreweryById(int id);
 	}
 }

@@ -17,10 +17,10 @@ namespace Application.Repositories
 		{
 			_context = context;
 		}
-
-		public Task<List<Beer>> GetAllBeers(int breweryId)
+		
+		public async Task<List<Beer>> GetAllBeers(int breweryId)
 		{
-			return _context.Beers.Where(b => b.BreweryId == breweryId).ToListAsync();
+			return await _context.Beers.Where(b => b.BreweryId == breweryId).ToListAsync();
 		}
 		public async Task AddBeer(Beer beer)
 		{
@@ -28,13 +28,25 @@ namespace Application.Repositories
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task DeleteBeer(Beer beer)
+		public async Task DeleteBeer(int beerId, int breweryId)
 		{
-			var beerOnDatabase = await _context.Beers.FindAsync(beer);
-
-			if (beerOnDatabase != null)
+			var beer = await _context.Beers.FindAsync(beerId);
+			
+			if (beer.BreweryId == breweryId)
+			{
 				_context.Beers.Remove(beer);
-			await _context.SaveChangesAsync();
+				await _context.SaveChangesAsync();
+			}
 		}
-	}
+
+        public async Task<List<Brewery>> GetAllBreweriesAsync()
+        {
+            return await _context.Breweries.ToListAsync();
+        }
+
+        public async Task<Brewery> GetBreweryById(int id)
+        {
+            return await _context.Breweries.FindAsync(id);
+        }
+    }
 }
