@@ -8,7 +8,7 @@ namespace Application.Repositories
 	public interface IWholesalerRepository
 	{
 		Task AddSale(BeerStock wholesalerBeer);
-		Task UpdateRemainingStock(int wholesalerBeerId, int stock);
+		Task UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity);
 		Task<List<BeerStock>> GetAllStockByWholesaler(int wholesalerId);
 	}
 }

@@ -34,13 +34,12 @@ namespace Application.Repositories
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task UpdateRemainingStock(int beerStockId, int stock)
+		public async Task UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity)
 		{
 			var beerStock = await _context.BeerStocks.FindAsync(beerStockId);
-			if (beerStock == null) throw new Exception("Wholesalerbeer dont existe");
-
-			beerStock.Quantity = stock;
-
+			if (beerStock == null) throw new Exception("BeerStock don't exist");
+			if(beerStock.WholesalerId != wholesalerId) throw new Exception("BeerStock don't belong to this wholesaler");
+			beerStock.Quantity = quantity;
 			_context.BeerStocks.Update(beerStock);
 			await _context.SaveChangesAsync();
 		}
@@ -48,8 +47,7 @@ namespace Application.Repositories
 		public async Task<List<BeerStock>> GetAllStockByWholesaler(int wholesalerId)
 		{
 			var beerStocks = await _context.BeerStocks.Where(x => x.WholesalerId == wholesalerId).ToListAsync();
-			if (beerStocks == null) throw new Exception("Wholesaler dont existe");
-
+			if (beerStocks == null) throw new Exception("Wholesaler don't exist");
 			return beerStocks;
 		}
 	}

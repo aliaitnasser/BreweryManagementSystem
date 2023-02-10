@@ -26,5 +26,12 @@ namespace API.Controllers
             await _wholesalerRepository.AddSale(beerStock);
             return Ok();
         }
+
+        [HttpPut("{wholesalerId}/stocks/{beerStockId}")]
+        public async Task<IActionResult> UpdateRemainingStock(int beerStockId ,int wholesalerId,[FromBody] int quantity)
+        {
+            await _wholesalerRepository.UpdateRemainingStock(beerStockId ,wholesalerId, quantity);
+            return Ok();
+        }
     }
 }
