@@ -1,5 +1,4 @@
-﻿using API.Dtos;
-using Application.Repositories;
+﻿using Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -12,7 +11,7 @@ namespace API.Controllers
         {
             _breweryRepository = breweryRepository;
         }
-
+		
 		[HttpGet]
 		public async Task<ActionResult<List<Brewery>>> GetAllBreweries()
 		{
@@ -28,7 +27,7 @@ namespace API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> CreateBeer(Beer beer)
+		public async Task<IActionResult> AddBeer(Beer beer)
 		{
 			await _breweryRepository.AddBeer(beer);
 			return Ok();

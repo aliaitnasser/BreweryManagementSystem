@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Models
 {
-	public class WholesalerBeer
+	public class BeerStock
 	{
 		public int Id { get; set; }
 		public int BeerId { get; set; }

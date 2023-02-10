@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 
 using Persistence;
 
@@ -15,33 +16,41 @@ namespace Application.Repositories
 		{
 			_context = context;
 		}
-		public async Task AddSale(WholesalerBeer wholesalerBeer)
+		public async Task AddSale(BeerStock beerStock)
 		{
-			var beer = await _context.Beers.FindAsync(wholesalerBeer.BeerId);
+			var beer = await _context.Beers.FindAsync(beerStock.BeerId);
 			if (beer == null) throw new Exception("Beer must existe");
 
-			var wholesaler = await _context.Wholesalers.FindAsync(wholesalerBeer.WholesalerId);
+			var wholesaler = await _context.Wholesalers.FindAsync(beerStock.WholesalerId);
 			if (wholesaler == null) throw new Exception("Wholesaler must existe");
 
-			if (beer.Quantity < wholesalerBeer.Quantity) throw new Exception("Beer quantity is not enaugh");
+			if (beer.Quantity < beerStock.Quantity) throw new Exception("Beer quantity is not enaugh");
 
-			beer.Quantity -= wholesalerBeer.Quantity;
+			beer.Quantity -= beerStock.Quantity;
 
 			_context.Beers.Update(beer);
-			_context.WholesalerBeers.Add(wholesalerBeer);
+			_context.BeerStocks.Add(beerStock);
 
 			await _context.SaveChangesAsync();
 		}
 
-		public async Task UpdateRemainingStock(int wholesalerBeerId, int stock)
+		public async Task UpdateRemainingStock(int beerStockId, int stock)
 		{
-			var wholesalerBeer = await _context.WholesalerBeers.FindAsync(wholesalerBeerId);
-			if (wholesalerBeer == null) throw new Exception("Wholesalerbeer dont existe");
+			var beerStock = await _context.BeerStocks.FindAsync(beerStockId);
+			if (beerStock == null) throw new Exception("Wholesalerbeer dont existe");
 
-			wholesalerBeer.Quantity = stock;
+			beerStock.Quantity = stock;
 
-			_context.WholesalerBeers.Update(wholesalerBeer);
+			_context.BeerStocks.Update(beerStock);
 			await _context.SaveChangesAsync();
+		}
+
+		public async Task<List<BeerStock>> GetAllStockByWholesaler(int wholesalerId)
+		{
+			var beerStocks = await _context.BeerStocks.Where(x => x.WholesalerId == wholesalerId).ToListAsync();
+			if (beerStocks == null) throw new Exception("Wholesaler dont existe");
+
+			return beerStocks;
 		}
 	}
 }

@@ -24,7 +24,7 @@ namespace Application.Repositories
 		}
 		public async Task AddBeer(Beer beer)
 		{
-			_context.Beers.Add(beer);
+			await _context.Beers.AddAsync(beer);
 			await _context.SaveChangesAsync();
 		}
 
@@ -42,11 +42,6 @@ namespace Application.Repositories
         public async Task<List<Brewery>> GetAllBreweriesAsync()
         {
             return await _context.Breweries.ToListAsync();
-        }
-
-        public async Task<Brewery> GetBreweryById(int id)
-        {
-            return await _context.Breweries.FindAsync(id);
         }
     }
 }

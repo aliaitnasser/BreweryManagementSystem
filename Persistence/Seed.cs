@@ -107,9 +107,9 @@ namespace Persistence
 
 			var wholesalers = new List<Wholesaler>
 			{
-				new Wholesaler { Name = "GeneDrinks Inc", WholesalerBeers = new List<WholesalerBeer>()},
-				new Wholesaler { Name = "Budweiser Distributors", WholesalerBeers = new List<WholesalerBeer>()},
-				new Wholesaler { Name = "Coors Distributors Inc", WholesalerBeers = new List<WholesalerBeer>()}
+				new Wholesaler { Name = "GeneDrinks Inc", BeerStocks = new List<BeerStock>()},
+				new Wholesaler { Name = "Budweiser Distributors", BeerStocks = new List<BeerStock>()},
+				new Wholesaler { Name = "Coors Distributors Inc", BeerStocks = new List<BeerStock>()}
 			};
 
 			await context.Breweries.AddRangeAsync(breweries);
