@@ -104,6 +104,9 @@ namespace Persistence.Migrations
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 

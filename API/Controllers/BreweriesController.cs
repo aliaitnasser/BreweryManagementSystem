@@ -11,33 +11,26 @@ namespace API.Controllers
         {
             _breweryRepository = breweryRepository;
         }
-		
-		[HttpGet]
-		public async Task<ActionResult<List<Brewery>>> GetAllBreweries()
-		{
-			var breweries = await _breweryRepository.GetAllBreweriesAsync();
-			return Ok(breweries);
-		}
 
 		[HttpGet("{id}/beers")]
-		public async Task<ActionResult<List<Beer>>> GetAllBeersByBrewery(int id)
+		public async Task<IActionResult> GetAllBeersByBrewery(int id)
 		{
-			var beers = await _breweryRepository.GetAllBeers(id);
-			return Ok(beers);
+			var beers = await _breweryRepository.GetAllBeersByBrewery(id);
+			return HandleResult(beers);
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> AddBeer(Beer beer)
 		{
-			await _breweryRepository.AddBeer(beer);
-			return Ok();
+			var result = await _breweryRepository.AddBeer(beer);
+			return HandleResult(result);
 		}
 
 		[HttpDelete("{breweryId}/beer/{beerId}")]
 		public async Task<IActionResult> DeleteBeer(int beerId, int breweryId)
 		{
-			await _breweryRepository.DeleteBeer(beerId, breweryId);
-			return Ok();
+			var result = await _breweryRepository.DeleteBeer(beerId, breweryId);
+			return HandleResult(result);
 		}
     }
 }

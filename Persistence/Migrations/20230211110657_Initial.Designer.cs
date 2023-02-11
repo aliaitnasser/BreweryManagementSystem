@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230210155718_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230211110657_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,6 +105,9 @@ namespace Persistence.Migrations
 
                     b.Property<int>("BeerId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("OrderPrice")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
