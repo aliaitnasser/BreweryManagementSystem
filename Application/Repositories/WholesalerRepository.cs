@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Application.Core;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 using Persistence;
@@ -16,39 +17,54 @@ namespace Application.Repositories
 		{
 			_context = context;
 		}
-		public async Task AddSale(BeerStock beerStock)
+		public async Task<Result<BeerStock>> AddSale(BeerStock beerStock)
 		{
-			var beer = await _context.Beers.FindAsync(beerStock.BeerId);
-			if (beer == null) throw new Exception("Beer must existe");
+			var beer = await _context.Beers.FirstOrDefaultAsync(x => x.Id == beerStock.BeerId);
+			if (beer == null) return Result<BeerStock>.Failure("Beer must exist");
 
-			var wholesaler = await _context.Wholesalers.FindAsync(beerStock.WholesalerId);
-			if (wholesaler == null) throw new Exception("Wholesaler must existe");
+			var wholesaler = await _context.Wholesalers.FirstOrDefaultAsync(x => x.Id == beerStock.WholesalerId);
+			if (wholesaler == null) return Result<BeerStock>.Failure("Wholesaler must exist");
 
-			if (beer.Quantity < beerStock.Quantity) throw new Exception("Beer quantity is not enaugh");
+			if (beer.Quantity < beerStock.Quantity) return Result<BeerStock>.Failure("Quantity must be less than or equal to the remaining stock");
 
 			beer.Quantity -= beerStock.Quantity;
 
 			_context.Beers.Update(beer);
-			_context.BeerStocks.Add(beerStock);
 
-			await _context.SaveChangesAsync();
+			var beerStockExist = _context.BeerStocks.FirstOrDefault(x => x.BeerId == beerStock.BeerId && x.WholesalerId == beerStock.WholesalerId);
+			if (beerStockExist != null)
+			{
+				beerStockExist.Quantity += beerStock.Quantity;
+				_context.BeerStocks.Update(beerStockExist);
+			}
+			else
+			{
+				_context.BeerStocks.Add(beerStock);
+			}
+			
+			var result = await _context.SaveChangesAsync() > 0;
+			if (result) return Result<BeerStock>.Success(beerStock);
+			return Result<BeerStock>.Failure("Failed to add sale");
 		}
 
-		public async Task UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity)
+		public async Task<Result<BeerStock>> UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity)
 		{
-			var beerStock = await _context.BeerStocks.FindAsync(beerStockId);
-			if (beerStock == null) throw new Exception("BeerStock don't exist");
-			if(beerStock.WholesalerId != wholesalerId) throw new Exception("BeerStock don't belong to this wholesaler");
+			var beerStock = await _context.BeerStocks.FirstOrDefaultAsync(x => x.Id == beerStockId);
+			if (beerStock == null) return Result<BeerStock>.Failure("BeerStock does not exist");
+			if(beerStock.WholesalerId != wholesalerId) return Result<BeerStock>.Failure("BeerStock does not belong to this wholesaler");
+			
 			beerStock.Quantity = quantity;
 			_context.BeerStocks.Update(beerStock);
-			await _context.SaveChangesAsync();
+			var result = await _context.SaveChangesAsync() > 0;
+			if (result) return Result<BeerStock>.Success(beerStock);
+			return Result<BeerStock>.Failure("Failed to update remaining stock");
 		}
 
-		public async Task<List<BeerStock>> GetAllStockByWholesaler(int wholesalerId)
+		public async Task<Result<List<BeerStock>>> GetAllStockByWholesaler(int wholesalerId)
 		{
 			var beerStocks = await _context.BeerStocks.Where(x => x.WholesalerId == wholesalerId).ToListAsync();
-			if (beerStocks == null) throw new Exception("Wholesaler don't exist");
-			return beerStocks;
+			if (beerStocks == null || beerStocks.Count == 0) return Result<List<BeerStock>>.Failure("No beer stocks found for this wholesaler");
+			return Result<List<BeerStock>>.Success(beerStocks);
 		}
 	}
 }

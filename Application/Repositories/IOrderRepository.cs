@@ -1,9 +1,10 @@
+using Application.Core;
 using Models;
 
 namespace Application.Repositories
 {
     public interface IOrderRepository
     {
-         Task AddOrder(Order order);
+         Task<Result<Order>> AddOrder(Order order);
     }
 }

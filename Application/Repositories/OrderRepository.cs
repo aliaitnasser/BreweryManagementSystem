@@ -1,3 +1,5 @@
+using Application.Core;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 using Persistence;
@@ -13,17 +15,17 @@ namespace Application.Repositories
 			_context = context;
 		}
 
-		public Task AddOrder(Order order)
+		public async Task<Result<Order>> AddOrder(Order order)
 		{
-			var wholesaler = _context.Wholesalers.FirstOrDefault(x => x.Id == order.WholesalerId);
-			if (wholesaler == null) throw new Exception("Wholesaler not found");
+			var wholesaler = await _context.Wholesalers.FirstOrDefaultAsync(x => x.Id == order.WholesalerId);
+			if (wholesaler == null) return Result<Order>.Failure("Wholesaler not found");
 
-			var beer = _context.Beers.FirstOrDefault(x => x.Id == order.BeerId);
-			if (beer == null) throw new Exception("Beer not found");
+			var beer = await _context.Beers.FirstOrDefaultAsync(x => x.Id == order.BeerId);
+			if (beer == null) return Result<Order>.Failure("Beer not found");
 
-			var beerStock = _context.BeerStocks.FirstOrDefault(x => x.BeerId == order.BeerId && x.WholesalerId == order.WholesalerId);
-			if (beerStock == null) throw new Exception("Beer stock not found");
-			if (beerStock.Quantity < order.Quantity) throw new Exception("Not enough beer in stock");
+			var beerStock = await _context.BeerStocks.FirstOrDefaultAsync(x => x.BeerId == order.BeerId && x.WholesalerId == order.WholesalerId);
+			if (beerStock == null) return Result<Order>.Failure("No stock for this beer");
+			if (beerStock.Quantity < order.Quantity) return Result<Order>.Failure("Quantity must be less than or equal to the remaining stock");
 
 			order.OrderPrice = beer.Price * order.Quantity;
 
@@ -35,7 +37,9 @@ namespace Application.Repositories
 			_context.BeerStocks.Update(beerStock);
 
 			_context.Orders.Add(order);
-			return _context.SaveChangesAsync();
+			var result = await _context.SaveChangesAsync() > 0;
+			if (result) return Result<Order>.Success(order);
+			return Result<Order>.Failure("Failed to add order");
 		}
 
 		private static decimal CalculateDiscount(int quantity, decimal price)

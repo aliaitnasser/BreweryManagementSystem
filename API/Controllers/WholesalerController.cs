@@ -17,21 +17,21 @@ namespace API.Controllers
         public async Task<IActionResult> GetAllStockByWholesaler(int wholesalerId)
         {
             var beerStocks = await _wholesalerRepository.GetAllStockByWholesaler(wholesalerId);
-            return Ok(beerStocks);
+            return HandleResult(beerStocks);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddSale(BeerStock beerStock)
         {
-            await _wholesalerRepository.AddSale(beerStock);
-            return Ok();
+            var beerstock = await _wholesalerRepository.AddSale(beerStock);
+            return HandleResult(beerstock);
         }
 
         [HttpPut("{wholesalerId}/stocks/{beerStockId}")]
         public async Task<IActionResult> UpdateRemainingStock(int beerStockId ,int wholesalerId,[FromBody] int quantity)
         {
-            await _wholesalerRepository.UpdateRemainingStock(beerStockId ,wholesalerId, quantity);
-            return Ok();
+            var updatedStock = await _wholesalerRepository.UpdateRemainingStock(beerStockId ,wholesalerId, quantity);
+            return HandleResult(updatedStock);
         }
     }
 }

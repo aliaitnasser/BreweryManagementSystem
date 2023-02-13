@@ -16,8 +16,8 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder(Order order)
         {
-            await _orderRepository.AddOrder(order);
-            return Ok();
+            var result = await _orderRepository.AddOrder(order);
+            return HandleResult(result);
         }
     }
 }

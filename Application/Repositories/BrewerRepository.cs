@@ -25,8 +25,8 @@ namespace Application.Repositories
 			if (breweryExists == null) return Result<List<Beer>>.Failure("Brewery does not exist");
 
 			var beers = await _context.Beers.Where(b => b.BreweryId == breweryId).ToListAsync();
-			if(beers.Count == 0) return Result<List<Beer>>.Failure("No beers found for this brewery");
-			
+			if(beers == null || beers.Count == 0) return Result<List<Beer>>.Failure("No beers found for this brewery");
+
 			return Result<List<Beer>>.Success(beers);
 		}
 		public async Task<Result<Beer>> AddBeer(Beer beer)
