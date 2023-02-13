@@ -25,11 +25,6 @@ namespace Application.Repositories
 			_mapper = mapper;
 		}
 		
-		/// <summary>
-		/// Getting all beers for a brewery
-		/// </summary>
-		/// <param name="breweryId"></param>
-		/// <returns></returns>
 		public async Task<Result<List<BeerDto>>> GetAllBeersByBrewery(int breweryId)
 		{
 			var breweryExists = await _context.Breweries.FindAsync(breweryId);
@@ -41,11 +36,7 @@ namespace Application.Repositories
 			var beersDto = _mapper.Map<List<Beer>, List<BeerDto>>(beers);
 			return Result<List<BeerDto>>.Success(beersDto, "Beers found successfully");
 		}
-		/// <summary>
-		/// Adding a beer for a brewery
-		/// </summary>
-		/// <param name="beer"></param>
-		/// <returns></returns>
+
 		public async Task<Result<CreateBeerDto>> AddBeer(CreateBeerDto beer)
 		{
 			var breweryExists = await _context.Breweries.FindAsync(beer.BreweryId);

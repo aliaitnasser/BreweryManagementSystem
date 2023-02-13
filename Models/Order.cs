@@ -18,7 +18,5 @@ namespace Models
 		public int Quantity { get; set; }
 		[Column(TypeName = "decimal(18,4)")]
 		public decimal OrderPrice { get; set; }
-		
-		
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Core;
+using Application.Dto;
 using Application.Repositories;
 
 using AutoMapper;
@@ -11,43 +12,31 @@ namespace API.Controllers
 	public class BreweriesController : BaseController
 	{
 		private readonly IBrewerRepository _breweryRepository;
-		private readonly IMapper _mapper;
 
-		public BreweriesController(IBrewerRepository breweryRepository, IMapper mapper)
+		public BreweriesController(IBrewerRepository breweryRepository)
 		{
 			_breweryRepository = breweryRepository;
-			_mapper = mapper;
 		}
 
 		[HttpGet("{id}/beers")]
 		public async Task<IActionResult> GetAllBeersByBrewery(int id)
 		{
 			var beers = await _breweryRepository.GetAllBeersByBrewery(id);
-
-			//return HandleResult(beers);		
-			if (beers.IsSuccess && beers.Value != null)
-			{
-				return Ok(beers.Value);
-			}
-			if (beers.IsSuccess && beers.Value == null)
-			{
-				return NotFound();
-			}
-			return BadRequest(beers.Error);
+			return HandleResultWithValue(beers);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddBeer(Beer beer)
+		public async Task<IActionResult> AddBeer(CreateBeerDto beer)
 		{
 			var result = await _breweryRepository.AddBeer(beer);
-			return HandleResult(result);
+			return HandleResultWithMessage(result);
 		}
 
 		[HttpDelete("{breweryId}/beer/{beerId}")]
 		public async Task<IActionResult> DeleteBeer(int beerId, int breweryId)
 		{
 			var result = await _breweryRepository.DeleteBeer(beerId, breweryId);
-			return HandleResult(result);
+			return HandleResultWithMessage(result);
 		}
     }
 }

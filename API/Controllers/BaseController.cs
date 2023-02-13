@@ -7,19 +7,30 @@ namespace API.Controllers
 	[Route("api/[controller]")]
 	public class BaseController : ControllerBase
 	{
-		protected ActionResult HandleResult<T>(Result<T> result)
+		protected ActionResult HandleResultWithValue<T>(Result<T> result)
 		{
 			
 			if (result.IsSuccess && result.Value != null)
 			{
-				if (HttpContext.Request.Method == "POST") return Ok(result.Message);
-				if (HttpContext.Request.Method == "GET") return Ok(result.Value);
-				if (HttpContext.Request.Method == "PUT") return Ok(result.Message);
-				if (HttpContext.Request.Method == "DELETE") return Ok(result.Message);
+				return Ok(result.Value);
 			}
 			if (result.IsSuccess && result.Value == null)
 			{
-				return NotFound();
+				return NotFound(result.Error);
+			}
+			return BadRequest(result.Error);
+		}
+
+		protected ActionResult HandleResultWithMessage<T>(Result<T> result)
+		{
+
+			if (result.IsSuccess && result.Value != null)
+			{
+				return Ok(result.Message);
+			}
+			if (result.IsSuccess && result.Value == null)
+			{
+				return NotFound(result.Error);
 			}
 			return BadRequest(result.Error);
 		}

@@ -1,4 +1,6 @@
 ﻿using Application.Core;
+using Application.Dto;
+
 using Models;
 
 using System;
@@ -8,8 +10,8 @@ namespace Application.Repositories
 {
 	public interface IWholesalerRepository
 	{
-		Task<Result<BeerStock>> AddSale(BeerStock wholesalerBeer);
+		Task<Result<BeerStockDto>> AddSale(BeerStockDto wholesalerBeer);
 		Task<Result<BeerStock>> UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity);
-		Task<Result<List<BeerStock>>> GetAllStockByWholesaler(int wholesalerId);
+		Task<Result<List<BeerStockDto>>> GetAllStockByWholesaler(int wholesalerId);
 	}
 }

@@ -1,5 +1,7 @@
+using Application.Core;
 using Application.Repositories;
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
@@ -21,8 +23,7 @@ builder.Services.AddScoped<IBrewerRepository, BrewerRepository>();
 builder.Services.AddScoped<IWholesalerRepository, WholesalerRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 builder.Services.AddDbContext<DataContext>(opt =>
 {

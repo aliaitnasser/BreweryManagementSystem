@@ -30,7 +30,6 @@ namespace Application.Repositories
 			order.OrderPrice = beer.Price * order.Quantity;
 
 			var discount = CalculateDiscount(order.Quantity, order.OrderPrice);
-
 			order.OrderPrice -= discount;
 
 			beerStock.Quantity -= order.Quantity;
@@ -40,8 +39,11 @@ namespace Application.Repositories
 			var result = await _context.SaveChangesAsync() > 0;
 			if (result)
 			{
-				if(order.Quantity > 20) return Result<Order>.Success(order, "Order added successfully. You have received a 20% discount");
-				if(order.Quantity > 10) return Result<Order>.Success(order, "Order added successfully. You have received a 10% discount");
+				if(order.Quantity > 20) 
+					return Result<Order>.Success(order, "Order added successfully. You have received a 20% discount");
+				if(order.Quantity > 10) 
+					return Result<Order>.Success(order, "Order added successfully. You have received a 10% discount");
+				return Result<Order>.Success(order, "Order added successfully");
 			}
 			return Result<Order>.Failure("Failed to add order");
 		}
@@ -49,8 +51,8 @@ namespace Application.Repositories
 		private static decimal CalculateDiscount(int quantity, decimal price)
 		{
 			decimal discount = 0;
-			if (quantity > 10) return _ = price * 10 / 100;
 			if (quantity > 20) return _ = price * 20 / 100;
+			if (quantity > 10) return _ = price * 10 / 100;
 			return discount;
 		}
 	}
