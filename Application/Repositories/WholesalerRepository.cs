@@ -43,7 +43,7 @@ namespace Application.Repositories
 			}
 			
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<BeerStock>.Success(beerStock);
+			if (result) return Result<BeerStock>.Success(beerStock, "Sale added successfully");
 			return Result<BeerStock>.Failure("Failed to add sale");
 		}
 
@@ -56,7 +56,7 @@ namespace Application.Repositories
 			beerStock.Quantity = quantity;
 			_context.BeerStocks.Update(beerStock);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<BeerStock>.Success(beerStock);
+			if (result) return Result<BeerStock>.Success(beerStock, "Remaining stock updated successfully");
 			return Result<BeerStock>.Failure("Failed to update remaining stock");
 		}
 
@@ -64,7 +64,7 @@ namespace Application.Repositories
 		{
 			var beerStocks = await _context.BeerStocks.Where(x => x.WholesalerId == wholesalerId).ToListAsync();
 			if (beerStocks == null || beerStocks.Count == 0) return Result<List<BeerStock>>.Failure("No beer stocks found for this wholesaler");
-			return Result<List<BeerStock>>.Success(beerStocks);
+			return Result<List<BeerStock>>.Success(beerStocks, "Beer stocks found successfully");
 		}
 	}
 }

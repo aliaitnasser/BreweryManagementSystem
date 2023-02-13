@@ -27,7 +27,7 @@ namespace Application.Repositories
 			var beers = await _context.Beers.Where(b => b.BreweryId == breweryId).ToListAsync();
 			if(beers == null || beers.Count == 0) return Result<List<Beer>>.Failure("No beers found for this brewery");
 
-			return Result<List<Beer>>.Success(beers);
+			return Result<List<Beer>>.Success(beers, "Beers found successfully");
 		}
 		public async Task<Result<Beer>> AddBeer(Beer beer)
 		{
@@ -45,7 +45,7 @@ namespace Application.Repositories
 
 			await _context.Beers.AddAsync(beer);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<Beer>.Success(beer);
+			if (result) return Result<Beer>.Success(beer, "Beer added successfully");
 
 			return Result<Beer>.Failure("Failed to add beer");
 		}
@@ -58,7 +58,7 @@ namespace Application.Repositories
 
 			_context.Beers.Remove(beer);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<Beer>.Success(beer);
+			if (result) return Result<Beer>.Success(beer, "Beer deleted successfully");
 			return Result<Beer>.Failure("Failed to delete beer");
 		}
     }

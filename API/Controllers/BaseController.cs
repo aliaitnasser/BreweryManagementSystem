@@ -11,7 +11,9 @@ namespace API.Controllers
 		{
 			if (result.IsSuccess && result.Value != null)
 			{
-				return Ok(result.Value);
+				if(HttpContext.Request.Method == "POST") return Created(HttpContext.Request.Path, result.Message);
+				if(HttpContext.Request.Method == "GET") return Ok(result.Value);
+				if(HttpContext.Request.Method == "PUT") return Ok(result.Message);
 			}
 			if (result.IsSuccess && result.Value == null)
 			{
