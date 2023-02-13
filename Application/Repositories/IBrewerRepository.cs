@@ -1,4 +1,6 @@
 ﻿using Application.Core;
+using Application.Dto;
+
 using Models;
 
 using System;
@@ -8,8 +10,8 @@ namespace Application.Repositories
 {
 	public interface IBrewerRepository
 	{
-		Task<Result<List<Beer>>> GetAllBeersByBrewery(int breweryId);
-		Task<Result<Beer>> AddBeer(Beer beer);
-		Task<Result<Beer>> DeleteBeer(int beerId, int breweryId);
+		Task<Result<List<BeerDto>>> GetAllBeersByBrewery(int breweryId);
+		Task<Result<CreateBeerDto>> AddBeer(CreateBeerDto beer);
+		Task<Result<BeerDto>> DeleteBeer(int beerId, int breweryId);
 	}
 }

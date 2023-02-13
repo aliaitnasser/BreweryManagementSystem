@@ -1,4 +1,8 @@
 ﻿using Application.Core;
+using Application.Dto;
+
+using AutoMapper;
+
 using Microsoft.EntityFrameworkCore;
 
 using Models;
@@ -13,53 +17,68 @@ namespace Application.Repositories
 	public class BrewerRepository : IBrewerRepository
 	{
 		private readonly DataContext _context;
+		private readonly IMapper _mapper;
 
-		public BrewerRepository(DataContext context)
+		public BrewerRepository(DataContext context, IMapper mapper)
 		{
 			_context = context;
+			_mapper = mapper;
 		}
 		
-		public async Task<Result<List<Beer>>> GetAllBeersByBrewery(int breweryId)
+		/// <summary>
+		/// Getting all beers for a brewery
+		/// </summary>
+		/// <param name="breweryId"></param>
+		/// <returns></returns>
+		public async Task<Result<List<BeerDto>>> GetAllBeersByBrewery(int breweryId)
 		{
 			var breweryExists = await _context.Breweries.FindAsync(breweryId);
-			if (breweryExists == null) return Result<List<Beer>>.Failure("Brewery does not exist");
+			if (breweryExists == null) return Result<List<BeerDto>>.Failure("Brewery does not exist");
 
 			var beers = await _context.Beers.Where(b => b.BreweryId == breweryId).ToListAsync();
-			if(beers == null || beers.Count == 0) return Result<List<Beer>>.Failure("No beers found for this brewery");
+			if(beers == null || beers.Count == 0) return Result<List<BeerDto>>.Failure("No beers found for this brewery");
 
-			return Result<List<Beer>>.Success(beers, "Beers found successfully");
+			var beersDto = _mapper.Map<List<Beer>, List<BeerDto>>(beers);
+			return Result<List<BeerDto>>.Success(beersDto, "Beers found successfully");
 		}
-		public async Task<Result<Beer>> AddBeer(Beer beer)
+		/// <summary>
+		/// Adding a beer for a brewery
+		/// </summary>
+		/// <param name="beer"></param>
+		/// <returns></returns>
+		public async Task<Result<CreateBeerDto>> AddBeer(CreateBeerDto beer)
 		{
 			var breweryExists = await _context.Breweries.FindAsync(beer.BreweryId);
-			if (breweryExists == null) return Result<Beer>.Failure("Brewery does not exist");
+			if (breweryExists == null) return Result<CreateBeerDto>.Failure("Brewery does not exist");
 
 			var price = beer.Price;
-			if (price <= 0) return Result<Beer>.Failure("Price cannot be negative or zero");
+			if (price <= 0) return Result<CreateBeerDto>.Failure("Price cannot be negative or zero");
 
 			var quantity = beer.Quantity;
-			if (quantity <= 0) return Result<Beer>.Failure("Quantity cannot be negative or zero");
+			if (quantity <= 0) return Result<CreateBeerDto>.Failure("Quantity cannot be negative or zero");
 
 			var beerExists = await _context.Beers.AnyAsync(b => b.Name == beer.Name && b.BreweryId == beer.BreweryId);
-			if (beerExists) return Result<Beer>.Failure("Beer's name already exists");
+			if (beerExists) return Result<CreateBeerDto>.Failure("Beer's name already exists");
 
-			await _context.Beers.AddAsync(beer);
+			var beerToAdd = _mapper.Map<CreateBeerDto, Beer>(beer);
+			await _context.Beers.AddAsync(beerToAdd);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<Beer>.Success(beer, "Beer added successfully");
+			if (result) return Result<CreateBeerDto>.Success(beer, "Beer added successfully");
 
-			return Result<Beer>.Failure("Failed to add beer");
+			return Result<CreateBeerDto>.Failure("Failed to add beer");
 		}
 
-		public async Task<Result<Beer>> DeleteBeer(int beerId, int breweryId)
+		public async Task<Result<BeerDto>> DeleteBeer(int beerId, int breweryId)
 		{
 			var beer = await _context.Beers.FindAsync(beerId);
-			if (beer == null) return Result<Beer>.Failure("Beer does not exist");
-			if(beer.BreweryId != breweryId) return Result<Beer>.Failure("Beer does not belong to this brewery");
+			if (beer == null) return Result<BeerDto>.Failure("Beer does not exist");
+			if(beer.BreweryId != breweryId) return Result<BeerDto>.Failure("Beer does not belong to this brewery");
 
+			var beerDto = _mapper.Map<Beer, BeerDto>(beer);
 			_context.Beers.Remove(beer);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<Beer>.Success(beer, "Beer deleted successfully");
-			return Result<Beer>.Failure("Failed to delete beer");
+			if (result) return Result<BeerDto>.Success(beerDto, "Beer deleted successfully");
+			return Result<BeerDto>.Failure("Failed to delete beer");
 		}
     }
 }

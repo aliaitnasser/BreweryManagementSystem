@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 using Persistence;
 
-var builder = WebApplication.CreateBuilder(args);
+using System.Data;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -14,13 +14,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 });
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IBrewerRepository, BrewerRepository>();
 builder.Services.AddScoped<IWholesalerRepository, WholesalerRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 builder.Services.AddDbContext<DataContext>(opt =>
@@ -30,7 +31,6 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
