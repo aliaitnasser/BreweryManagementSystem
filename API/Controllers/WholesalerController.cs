@@ -21,11 +21,18 @@ namespace API.Controllers
             return HandleResultWithMessage(beerstock);
         }
 
-        [HttpPut("{wholesalerId}/stocks/{beerStockId}")]
-        public async Task<IActionResult> UpdateRemainingStock(int beerStockId ,int wholesalerId,[FromBody] int quantity)
+        [HttpPut]
+        public async Task<IActionResult> UpdateRemainingStock(BeerStockDto beerStockDto)
         {
-            var updatedStock = await _wholesalerRepository.UpdateRemainingStock(beerStockId ,wholesalerId, quantity);
+            var updatedStock = await _wholesalerRepository.UpdateRemainingStock(beerStockDto);
             return HandleResultWithMessage(updatedStock);
         }
+
+        [HttpGet("{wholesalerId}")]
+        public async Task<IActionResult> GetWholesalerStock(int wholesalerId)
+        {
+			var stock = await _wholesalerRepository.GetAllBeerStockByWholesaler(wholesalerId);
+			return HandleResultWithValue(stock);
+		}
     }
 }

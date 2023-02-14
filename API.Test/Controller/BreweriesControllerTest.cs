@@ -42,10 +42,12 @@ namespace BreweryManagement.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var obj = result.Result as OkObjectResult;
 
 			//Assert
-			result.Should().BeOfType<OkObjectResult>();
-			result.Should().NotBeNull();
+			obj.Should().BeOfType<OkObjectResult>();
+			obj.Should().NotBeNull();
+			obj.Value.Should().BeOfType<List<BeerDto>>();
 		}
 
 		[Fact]
@@ -59,9 +61,12 @@ namespace BreweryManagement.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var obj = result.Result as BadRequestObjectResult;
 
 			//Assert
-			result.Should().BeOfType<BadRequestObjectResult>();
+			obj.Should().BeOfType<BadRequestObjectResult>();
+			obj.Should().NotBeNull();
+			obj.Value.Should().Be("Beers not found");
 		}
 
 		[Fact]
@@ -75,9 +80,10 @@ namespace BreweryManagement.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var obj = result.Result as NotFoundObjectResult;
 
 			//Assert
-			result.Should().BeOfType<NotFoundObjectResult>();
+			obj.Should().BeOfType<NotFoundObjectResult>();
 		}
 
 		[Fact]

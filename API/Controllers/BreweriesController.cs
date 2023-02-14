@@ -18,10 +18,10 @@ namespace API.Controllers
 			_breweryRepository = breweryRepository;
 		}
 
-		[HttpGet("{id}/beers")]
-		public async Task<IActionResult> GetAllBeersByBrewery(int id)
+		[HttpGet("{breweryId}/beers")]
+		public async Task<ActionResult<Result<List<BeerDto>>>> GetAllBeersByBrewery(int breweryId)
 		{
-			var beers = await _breweryRepository.GetAllBeersByBrewery(id);
+			var beers = await _breweryRepository.GetAllBeersByBrewery(breweryId);
 			return HandleResultWithValue(beers);
 		}
 

@@ -24,7 +24,7 @@ namespace Application.Repositories
 			_context = context;
 			_mapper = mapper;
 		}
-		
+
 		public async Task<Result<List<BeerDto>>> GetAllBeersByBrewery(int breweryId)
 		{
 			var breweryExists = await _context.Breweries.FindAsync(breweryId);

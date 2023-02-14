@@ -11,6 +11,7 @@ namespace Application.Repositories
 	public interface IWholesalerRepository
 	{
 		Task<Result<BeerStockDto>> AddSale(BeerStockDto wholesalerBeer);
-		Task<Result<BeerStockDto>> UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity);
+		Task<Result<BeerStockDto>> UpdateRemainingStock(BeerStockDto beerStockDto);
+		Task<Result<List<BeerStockDto>>> GetAllBeerStockByWholesaler(int id);
 	}
 }

@@ -92,17 +92,15 @@ namespace BreweryManagement.Test.Controller
 		public async Task UpdateRemainingStock_Should_Return_Ok_And_Message_Sale_added_successfully()
 		{
 			//Arrenge
-			var beerStock = _fixture.Create<BeerStockDto>();
-			var beerStockId = _fixture.Create<int>();
-			var wholesalerId = _fixture.Create<int>();
+			var beerStockDto = _fixture.Create<BeerStockDto>();
 			var quantity = _fixture.Create<int>();
 
-			_repository.Setup(x => x.UpdateRemainingStock(beerStockId, wholesalerId, quantity))
-				.ReturnsAsync(Result<BeerStockDto>.Success(beerStock, "Remaining stock updated successfully"));
+			_repository.Setup(x => x.UpdateRemainingStock(beerStockDto))
+				.ReturnsAsync(Result<BeerStockDto>.Success(beerStockDto, "Remaining stock updated successfully"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);
-			var result = await _controller.UpdateRemainingStock(beerStockId, wholesalerId, quantity);
+			var result = await _controller.UpdateRemainingStock(beerStockDto);
 			var obj = result as OkObjectResult;
 
 			//Assert
