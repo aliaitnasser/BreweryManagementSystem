@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Models;
+
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Models;
 
 namespace Persistence
 {
@@ -12,7 +10,7 @@ namespace Persistence
 		public static async Task SeedData(DataContext context)
 		{
 			if (context.Breweries.Any()) return;
-			
+
 			var breweries = new List<Brewery>
 			{
 				new Brewery { Name = "Brooklyn Brewery", Beers = new List<Beer>()},

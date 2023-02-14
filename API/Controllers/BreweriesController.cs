@@ -2,10 +2,7 @@
 using Application.Dto;
 using Application.Repositories;
 
-using AutoMapper;
-
 using Microsoft.AspNetCore.Mvc;
-using Models;
 
 namespace API.Controllers
 {
@@ -19,24 +16,33 @@ namespace API.Controllers
 		}
 
 		[HttpGet("{breweryId}/beers")]
-		public async Task<ActionResult<Result<List<BeerDto>>>> GetAllBeersByBrewery(int breweryId)
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<BeerDto>>))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<Result<List<BeerDto>>>> GetAllBeersByBreweryAsync(int breweryId)
 		{
 			var beers = await _breweryRepository.GetAllBeersByBrewery(breweryId);
 			return HandleResultWithValue(beers);
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddBeer(CreateBeerDto beer)
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> AddBeerAsync(CreateBeerDto beer)
 		{
 			var result = await _breweryRepository.AddBeer(beer);
 			return HandleResultWithMessage(result);
 		}
 
 		[HttpDelete("{breweryId}/beer/{beerId}")]
-		public async Task<IActionResult> DeleteBeer(int beerId, int breweryId)
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> DeleteBeerAsync(int beerId, int breweryId)
 		{
 			var result = await _breweryRepository.DeleteBeer(beerId, breweryId);
 			return HandleResultWithMessage(result);
 		}
-    }
+	}
 }

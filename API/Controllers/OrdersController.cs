@@ -14,7 +14,10 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(Order order)
+		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> CreateOrder(Order order)
         {
             var result = await _orderRepository.AddOrder(order);
             return HandleResultWithMessage(result);

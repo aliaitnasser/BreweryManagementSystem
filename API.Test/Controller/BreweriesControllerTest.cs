@@ -1,22 +1,19 @@
 ﻿using API.Controllers;
+
 using Application.Core;
 using Application.Dto;
 using Application.Repositories;
-using AutoFixture;
 
-using AutoMapper;
+using AutoFixture;
 
 using FluentAssertions;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+
 using Moq;
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BreweryManagement.Test.Controller
 {
@@ -27,7 +24,7 @@ namespace BreweryManagement.Test.Controller
 		private BreweriesController _controller;
 		public BreweriesControllerTest()
 		{
-			_repository= new Mock<IBrewerRepository>();
+			_repository = new Mock<IBrewerRepository>();
 			_fixture = new Fixture();
 		}
 
@@ -41,7 +38,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var result = await _controller.GetAllBeersByBreweryAsync(breweryId);
 			var obj = result.Result as OkObjectResult;
 
 			//Assert
@@ -60,7 +57,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var result = await _controller.GetAllBeersByBreweryAsync(breweryId);
 			var obj = result.Result as BadRequestObjectResult;
 
 			//Assert
@@ -75,11 +72,11 @@ namespace BreweryManagement.Test.Controller
 			//Arrenge
 			var breweryId = _fixture.Create<int>();
 			var beersDto = _fixture.CreateMany<BeerDto>(breweryId).ToList();
-			_repository.Setup(x => x.GetAllBeersByBrewery(breweryId)).ReturnsAsync(Result<List<BeerDto>>.Success(null,"Beers not found"));
+			_repository.Setup(x => x.GetAllBeersByBrewery(breweryId)).ReturnsAsync(Result<List<BeerDto>>.Success(null, "Beers not found"));
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.GetAllBeersByBrewery(breweryId);
+			var result = await _controller.GetAllBeersByBreweryAsync(breweryId);
 			var obj = result.Result as NotFoundObjectResult;
 
 			//Assert
@@ -95,7 +92,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.AddBeer(beerDto);
+			var result = await _controller.AddBeerAsync(beerDto);
 
 			//Assert
 			result.Should().BeOfType<OkObjectResult>();
@@ -110,7 +107,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.AddBeer(beerDto);
+			var result = await _controller.AddBeerAsync(beerDto);
 
 			//Assert
 			result.Should().BeOfType<BadRequestObjectResult>();
@@ -125,7 +122,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.AddBeer(beerDto);
+			var result = await _controller.AddBeerAsync(beerDto);
 			var obj = result as NotFoundObjectResult;
 
 			//Assert
@@ -143,10 +140,10 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.DeleteBeer(beerId, breweryId);
+			var result = await _controller.DeleteBeerAsync(beerId, breweryId);
 
 			//Assert
-			result.Should().BeOfType<OkObjectResult>();	
+			result.Should().BeOfType<OkObjectResult>();
 		}
 
 		[Fact]
@@ -160,7 +157,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.DeleteBeer(beerId, breweryId);
+			var result = await _controller.DeleteBeerAsync(beerId, breweryId);
 
 			//Assert
 			result.Should().BeOfType<BadRequestObjectResult>();
@@ -177,7 +174,7 @@ namespace BreweryManagement.Test.Controller
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
-			var result = await _controller.DeleteBeer(beerId, breweryId);
+			var result = await _controller.DeleteBeerAsync(beerId, breweryId);
 
 			//Assert
 			result.Should().BeOfType<NotFoundObjectResult>();

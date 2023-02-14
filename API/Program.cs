@@ -1,12 +1,9 @@
 using Application.Core;
 using Application.Repositories;
 
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 using Persistence;
-
-using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

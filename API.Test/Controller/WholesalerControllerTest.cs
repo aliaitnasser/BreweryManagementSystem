@@ -10,15 +10,7 @@ using FluentAssertions;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Models;
-
 using Moq;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BreweryManagement.Test.Controller
 {
@@ -30,8 +22,8 @@ namespace BreweryManagement.Test.Controller
 
 		public WholesalerControllerTest()
 		{
-			_repository= new Mock<IWholesalerRepository>();
-			_fixture= new Fixture();
+			_repository = new Mock<IWholesalerRepository>();
+			_fixture = new Fixture();
 		}
 
 		[Fact]
@@ -39,12 +31,12 @@ namespace BreweryManagement.Test.Controller
 		{
 			//Arrenge
 			var beerStock = _fixture.Create<BeerStockDto>();
-			_repository.Setup(x => x.AddSale(beerStock))
+			_repository.Setup(x => x.AddSaleAsync(beerStock))
 				.ReturnsAsync(Result<BeerStockDto>.Success(beerStock, "Sale added successfully"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);
-			var result = await _controller.AddSale(beerStock);
+			var result = await _controller.AddSaleAsync(beerStock);
 			var obj = result as OkObjectResult;
 
 			//Assert
@@ -57,12 +49,12 @@ namespace BreweryManagement.Test.Controller
 		{
 			//Arrenge
 			var beerStock = _fixture.Create<BeerStockDto>();
-			_repository.Setup(x => x.AddSale(beerStock))
+			_repository.Setup(x => x.AddSaleAsync(beerStock))
 				.ReturnsAsync(Result<BeerStockDto>.Failure("Wholesaler must exist"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);
-			var result = await _controller.AddSale(beerStock);
+			var result = await _controller.AddSaleAsync(beerStock);
 			var obj = result as BadRequestObjectResult;
 
 			//Assert
@@ -75,12 +67,12 @@ namespace BreweryManagement.Test.Controller
 		{
 			//Arrenge
 			var beerStock = _fixture.Create<BeerStockDto>();
-			_repository.Setup(x => x.AddSale(beerStock))
-				.ReturnsAsync(Result<BeerStockDto>.Success(null,"Failed to add sale"));
+			_repository.Setup(x => x.AddSaleAsync(beerStock))
+				.ReturnsAsync(Result<BeerStockDto>.Success(null, "Failed to add sale"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);
-			var result = await _controller.AddSale(beerStock);
+			var result = await _controller.AddSaleAsync(beerStock);
 			var obj = result as NotFoundObjectResult;
 
 			//Assert
@@ -95,12 +87,12 @@ namespace BreweryManagement.Test.Controller
 			var beerStockDto = _fixture.Create<BeerStockDto>();
 			var quantity = _fixture.Create<int>();
 
-			_repository.Setup(x => x.UpdateRemainingStock(beerStockDto))
+			_repository.Setup(x => x.UpdateRemainingStockAsync(beerStockDto))
 				.ReturnsAsync(Result<BeerStockDto>.Success(beerStockDto, "Remaining stock updated successfully"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);
-			var result = await _controller.UpdateRemainingStock(beerStockDto);
+			var result = await _controller.UpdateRemainingStockAsync(beerStockDto);
 			var obj = result as OkObjectResult;
 
 			//Assert

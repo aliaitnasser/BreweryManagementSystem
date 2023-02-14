@@ -23,7 +23,7 @@ namespace Application.Repositories
 			_context = context;
 			_mapper = mapper;
 		}
-		public async Task<Result<BeerStockDto>> AddSale(BeerStockDto beerStockDto)
+		public async Task<Result<BeerStockDto>> AddSaleAsync(BeerStockDto beerStockDto)
 		{
 			var beer = await _context.Beers.FirstOrDefaultAsync(x => x.Id == beerStockDto.BeerId);
 			if (beer == null) return Result<BeerStockDto>.Failure("Beer must exist");
@@ -54,7 +54,7 @@ namespace Application.Repositories
 			return Result<BeerStockDto>.Failure("Failed to add sale");
 		}
 
-		public async Task<Result<BeerStockDto>> UpdateRemainingStock(BeerStockDto beerStockDto)
+		public async Task<Result<BeerStockDto>> UpdateRemainingStockAsync(BeerStockDto beerStockDto)
 		{
 			var beerStock = await _context.BeerStocks.FirstOrDefaultAsync(x => x.Id == beerStockDto.Id);
 			if (beerStock == null) 
