@@ -6,6 +6,8 @@ using AutoFixture;
 
 using AutoMapper;
 
+using FluentAssertions;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -16,7 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Test.Controller
+namespace BreweryManagement.Test.Controller
 {
 	public class BreweriesControllerTest
 	{
@@ -30,7 +32,7 @@ namespace API.Test.Controller
 		}
 
 		[Fact]
-		public async Task GetAllBeersByBrewery_Returns_Ok()
+		public async Task GetAllBeersByBrewery_Should_Return_Ok()
 		{
 			//Arrenge
 			var breweryId = _fixture.Create<int>();
@@ -40,14 +42,14 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
-			var obj = result as OkObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status200OK, obj.StatusCode);
+			result.Should().BeOfType<OkObjectResult>();
+			result.Should().NotBeNull();
 		}
 
 		[Fact]
-		public async Task GetAllBeersByBrewery_Returns_BadRequest()
+		public async Task GetAllBeersByBrewery__Should_Return_BadRequest()
 		{
 			//Arrenge
 			var breweryId = _fixture.Create<int>();
@@ -57,14 +59,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
-			var obj = result as BadRequestObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status400BadRequest, obj.StatusCode);	
+			result.Should().BeOfType<BadRequestObjectResult>();
 		}
 
 		[Fact]
-		public async Task GetAllBeersByBrewery_Returns_NotFound()
+		public async Task GetAllBeersByBrewery_Should_Return_NotFound()
 		{
 			//Arrenge
 			var breweryId = _fixture.Create<int>();
@@ -74,14 +75,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.GetAllBeersByBrewery(breweryId);
-			var obj = result as NotFoundObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status404NotFound, obj.StatusCode);
+			result.Should().BeOfType<NotFoundObjectResult>();
 		}
 
 		[Fact]
-		public async Task AddBeer_Returns_Ok()
+		public async Task AddBeer_Should_Return_Ok()
 		{
 			//Arrenge
 			var beerDto = _fixture.Create<CreateBeerDto>();
@@ -90,14 +90,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.AddBeer(beerDto);
-			var obj = result as OkObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status200OK, obj.StatusCode);
+			result.Should().BeOfType<OkObjectResult>();
 		}
 
 		[Fact]
-		public async Task AddBeer_Returns_BadRequest()
+		public async Task AddBeer_Should_Return_BadRequest()
 		{
 			//Arrenge
 			var beerDto = _fixture.Create<CreateBeerDto>();
@@ -106,14 +105,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.AddBeer(beerDto);
-			var obj = result as BadRequestObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status400BadRequest, obj.StatusCode);
+			result.Should().BeOfType<BadRequestObjectResult>();
 		}
 
 		[Fact]
-		public async Task AddBeer_Returns_NotFound()
+		public async Task AddBeer_Should__Return_NotFound()
 		{
 			//Arrenge
 			var beerDto = _fixture.Create<CreateBeerDto>();
@@ -125,11 +123,11 @@ namespace API.Test.Controller
 			var obj = result as NotFoundObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status404NotFound, obj.StatusCode);
+			result.Should().BeOfType<NotFoundObjectResult>();
 		}
 
 		[Fact]
-		public async Task DeleteBeer_Returns_OK()
+		public async Task DeleteBeer_Should_Return_OK()
 		{
 			//Arrenge
 			var beerId = _fixture.Create<int>();
@@ -140,14 +138,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.DeleteBeer(beerId, breweryId);
-			var obj = result as OkObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status200OK, obj.StatusCode);	
+			result.Should().BeOfType<OkObjectResult>();	
 		}
 
 		[Fact]
-		public async Task DeleteBeer_Returns_BadRequest()
+		public async Task DeleteBeer_Should_Return_BadRequest()
 		{
 			//Arrenge
 			var beerId = _fixture.Create<int>();
@@ -158,14 +155,13 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.DeleteBeer(beerId, breweryId);
-			var obj = result as BadRequestObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status400BadRequest, obj.StatusCode);
+			result.Should().BeOfType<BadRequestObjectResult>();
 		}
 
 		[Fact]
-		public async Task DeleteBeer_Returns_NotFound()
+		public async Task DeleteBeer_Should_Return_NotFound()
 		{
 			//Arrenge
 			var beerId = _fixture.Create<int>();
@@ -176,10 +172,9 @@ namespace API.Test.Controller
 			//Act
 			_controller = new BreweriesController(_repository.Object);
 			var result = await _controller.DeleteBeer(beerId, breweryId);
-			var obj = result as NotFoundObjectResult;
 
 			//Assert
-			Assert.Equal(StatusCodes.Status404NotFound, obj.StatusCode);
+			result.Should().BeOfType<NotFoundObjectResult>();
 		}
 	}
 }

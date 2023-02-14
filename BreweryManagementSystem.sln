@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{AA3E4809-2D48-4C95-806F-EFC861A6C5CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Test", "API.Test\API.Test.csproj", "{630D88FE-18E9-4701-9EA3-CC7D58DFDD1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BreweryManagement.Test", "API.Test\BreweryManagement.Test.csproj", "{630D88FE-18E9-4701-9EA3-CC7D58DFDD1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

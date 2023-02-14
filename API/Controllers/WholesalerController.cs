@@ -14,13 +14,6 @@ namespace API.Controllers
             _wholesalerRepository = wholesalerRepository;
         }
 
-        [HttpGet("{wholesalerId}/stocks")]
-        public async Task<IActionResult> GetAllStockByWholesaler(int wholesalerId)
-        {
-            var beerStocks = await _wholesalerRepository.GetAllStockByWholesaler(wholesalerId);
-            return HandleResultWithValue(beerStocks);
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddSale(BeerStockDto beerStock)
         {

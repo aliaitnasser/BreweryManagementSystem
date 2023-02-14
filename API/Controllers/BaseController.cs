@@ -30,7 +30,7 @@ namespace API.Controllers
 			}
 			if (result.IsSuccess && result.Value == null)
 			{
-				return NotFound(result.Error);
+				return NotFound(result.Message);
 			}
 			return BadRequest(result.Error);
 		}

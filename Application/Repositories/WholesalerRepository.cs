@@ -54,25 +54,19 @@ namespace Application.Repositories
 			return Result<BeerStockDto>.Failure("Failed to add sale");
 		}
 
-		public async Task<Result<BeerStock>> UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity)
+		public async Task<Result<BeerStockDto>> UpdateRemainingStock(int beerStockId ,int wholesalerId, int quantity)
 		{
 			var beerStock = await _context.BeerStocks.FirstOrDefaultAsync(x => x.Id == beerStockId);
-			if (beerStock == null) return Result<BeerStock>.Failure("BeerStock does not exist");
-			if(beerStock.WholesalerId != wholesalerId) return Result<BeerStock>.Failure("BeerStock does not belong to this wholesaler");
+			if (beerStock == null) return Result<BeerStockDto>.Failure("BeerStock does not exist");
+			if(beerStock.WholesalerId != wholesalerId) return Result<BeerStockDto>.Failure("BeerStock does not belong to this wholesaler");
 			
 			beerStock.Quantity = quantity;
 			_context.BeerStocks.Update(beerStock);
 			var result = await _context.SaveChangesAsync() > 0;
-			if (result) return Result<BeerStock>.Success(beerStock, "Remaining stock updated successfully");
-			return Result<BeerStock>.Failure("Failed to update remaining stock");
-		}
-
-		public async Task<Result<List<BeerStockDto>>> GetAllStockByWholesaler(int wholesalerId)
-		{
-			var beerStocks = await _context.BeerStocks.Where(x => x.WholesalerId == wholesalerId).ToListAsync();
-			if (beerStocks == null || beerStocks.Count == 0) return Result<List<BeerStockDto>>.Failure("No beer stocks found for this wholesaler");
-			var beerStocksDto = _mapper.Map<List<BeerStockDto>>(beerStocks);
-			return Result<List<BeerStockDto>>.Success(beerStocksDto, "Beer stocks found successfully");
+			var beerStokDto = _mapper.Map<BeerStockDto>(beerStock);
+			
+			if (result) return Result<BeerStockDto>.Success(beerStokDto, "Remaining stock updated successfully");
+			return Result<BeerStockDto>.Failure("Failed to update remaining stock");
 		}
 	}
 }
