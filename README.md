@@ -59,7 +59,7 @@ API to help breweries, and wholesaler manage their stock, sales, and order prope
 #### Adding an Order
 
 ```http
-  PUT /api/orders
+  POST /api/orders
 ```
 
 | Parameter | Type     | Description                       |
