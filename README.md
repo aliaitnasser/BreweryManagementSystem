@@ -46,7 +46,7 @@ API to help breweries, and wholesaler manage their stock, sales, and order prope
 | :-------- | :------- | :-------------------------------- |
 | `beerStockDto` | `BeerStockDto` | **Required**. Adding a sale (beerStock) to a wholesaler |
 
-#### Updatting a remaining stock by the wholesaler(owner)
+#### Updating a remaining stock by the wholesaler(owner)
 
 ```http
   PUT /api/wholesaler
@@ -54,7 +54,7 @@ API to help breweries, and wholesaler manage their stock, sales, and order prope
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `beerStockDto` | `BeerStockDto` | **Required**. updatting a remaining stock |
+| `beerStockDto` | `BeerStockDto` | **Required**. updating a remaining stock |
 
 #### Adding an Order
 
