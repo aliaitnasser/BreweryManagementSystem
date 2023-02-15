@@ -15,7 +15,7 @@ namespace API.Controllers
 		}
 
 		[HttpPost]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> AddSaleAsync(BeerStockDto beerStock)
@@ -25,7 +25,7 @@ namespace API.Controllers
 		}
 
 		[HttpPut]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> UpdateRemainingStockAsync(BeerStockDto beerStockDto)

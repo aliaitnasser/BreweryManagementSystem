@@ -16,7 +16,7 @@ namespace API.Controllers
 		}
 
 		[HttpGet("{breweryId}/beers")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Result<List<BeerDto>>))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<ActionResult<Result<List<BeerDto>>>> GetAllBeersByBreweryAsync(int breweryId)
@@ -26,7 +26,7 @@ namespace API.Controllers
 		}
 
 		[HttpPost]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> AddBeerAsync(CreateBeerDto beer)
@@ -36,7 +36,7 @@ namespace API.Controllers
 		}
 
 		[HttpDelete("{breweryId}/beer/{beerId}")]
-		[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IActionResult))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteBeerAsync(int beerId, int breweryId)

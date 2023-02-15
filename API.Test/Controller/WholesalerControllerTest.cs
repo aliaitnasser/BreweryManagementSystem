@@ -18,7 +18,7 @@ namespace BreweryManagement.Test.Controller
 	{
 		private Mock<IWholesalerRepository> _repository;
 		private Fixture _fixture;
-		private WholesalerController _controller;
+		private WholesalerController? _controller;
 
 		public WholesalerControllerTest()
 		{
@@ -68,7 +68,7 @@ namespace BreweryManagement.Test.Controller
 			//Arrenge
 			var beerStock = _fixture.Create<BeerStockDto>();
 			_repository.Setup(x => x.AddSaleAsync(beerStock))
-				.ReturnsAsync(Result<BeerStockDto>.Success(null, "Failed to add sale"));
+				.ReturnsAsync(Result<BeerStockDto>.Success(null!, "Failed to add sale"));
 
 			//Act
 			_controller = new WholesalerController(_repository.Object);

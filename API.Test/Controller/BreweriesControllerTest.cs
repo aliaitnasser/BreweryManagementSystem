@@ -21,7 +21,7 @@ namespace BreweryManagement.Test.Controller
 	{
 		private Mock<IBrewerRepository> _repository;
 		private Fixture _fixture;
-		private BreweriesController _controller;
+		private BreweriesController? _controller;
 		public BreweriesControllerTest()
 		{
 			_repository = new Mock<IBrewerRepository>();
@@ -44,7 +44,7 @@ namespace BreweryManagement.Test.Controller
 			//Assert
 			obj.Should().BeOfType<OkObjectResult>();
 			obj.Should().NotBeNull();
-			obj.Value.Should().BeOfType<List<BeerDto>>();
+			obj!.Value.Should().BeOfType<List<BeerDto>>();
 		}
 
 		[Fact]
@@ -63,7 +63,7 @@ namespace BreweryManagement.Test.Controller
 			//Assert
 			obj.Should().BeOfType<BadRequestObjectResult>();
 			obj.Should().NotBeNull();
-			obj.Value.Should().Be("Beers not found");
+			obj!.Value.Should().Be("Beers not found");
 		}
 
 		[Fact]
@@ -72,7 +72,7 @@ namespace BreweryManagement.Test.Controller
 			//Arrenge
 			var breweryId = _fixture.Create<int>();
 			var beersDto = _fixture.CreateMany<BeerDto>(breweryId).ToList();
-			_repository.Setup(x => x.GetAllBeersByBrewery(breweryId)).ReturnsAsync(Result<List<BeerDto>>.Success(null, "Beers not found"));
+			_repository.Setup(x => x.GetAllBeersByBrewery(breweryId)).ReturnsAsync(Result<List<BeerDto>>.Success(null!, "Beers not found"));
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
@@ -118,7 +118,7 @@ namespace BreweryManagement.Test.Controller
 		{
 			//Arrenge
 			var beerDto = _fixture.Create<CreateBeerDto>();
-			_repository.Setup(x => x.AddBeer(beerDto)).ReturnsAsync(Result<CreateBeerDto>.Success(null, "Beer not added"));
+			_repository.Setup(x => x.AddBeer(beerDto)).ReturnsAsync(Result<CreateBeerDto>.Success(null!, "Beer not added"));
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
@@ -170,7 +170,7 @@ namespace BreweryManagement.Test.Controller
 			var beerId = _fixture.Create<int>();
 			var breweryId = _fixture.Create<int>();
 			var beerDto = _fixture.Create<BeerDto>();
-			_repository.Setup(x => x.DeleteBeer(beerId, breweryId)).ReturnsAsync(Result<BeerDto>.Success(null, "Beer not deleted"));
+			_repository.Setup(x => x.DeleteBeer(beerId, breweryId)).ReturnsAsync(Result<BeerDto>.Success(null!, "Beer not deleted"));
 
 			//Act
 			_controller = new BreweriesController(_repository.Object);
